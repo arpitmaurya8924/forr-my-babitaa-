@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Diwali Babita 🪔</title>
+<style>
+:root{--fg:#fff3d6;--gold:#ffc23c;--pink:#ff6fa5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#12062a}
+body{color:var(--fg);font-family:Georgia,'Segoe UI',serif;overflow:hidden;text-align:center}
+.bg{position:fixed;inset:0;opacity:0;transition:opacity 1.6s}
+.bg.on{opacity:1}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.step{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;transform:translateY(24px) scale(.95);transition:all 1s;pointer-events:none}
+.step.on{opacity:1;transform:none;pointer-events:auto}
+.ic{font-size:76px;animation:fl 1.5s infinite alternate}
+h1{font-size:clamp(28px,8vw,50px);margin:10px 0;color:var(--gold);text-shadow:0 0 22px #ff9a1f}
+p{font-size:clamp(17px,4.6vw,23px);max-width:520px;line-height:1.55;margin:8px 0;text-shadow:0 2px 8px #0008}
+button{margin-top:20px;padding:13px 30px;font-size:18px;border:0;border-radius:30px;background:linear-gradient(90deg,var(--gold),var(--pink));color:#2a0a3a;font-weight:bold;cursor:pointer;box-shadow:0 0 18px #ffb347}
+@keyframes fl{from{filter:drop-shadow(0 0 8px #ffb347);transform:scale(1) rotate(-3deg)}to{filter:drop-shadow(0 0 30px #ffd54a);transform:scale(1.12) rotate(3deg)}}
+.dots{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;gap:8px}
+.dots i{width:9px;height:9px;border-radius:50%;background:#ffffff44;transition:.4s}
+.dots i.a{background:var(--gold);transform:scale(1.4)}
+#mute{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;margin:0;padding:8px 12px;font-size:18px;background:#ffffff22;box-shadow:none;z-index:5}
+.w{font-size:clamp(18px,5vw,24px);margin:5px 0}
+.w span{opacity:0;display:inline-block;animation:up .8s forwards}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="bg on" style="background:radial-gradient(circle at 50% 100%,#4a1259,#12062a 70%)"></div>
+<div class="bg" style="background:linear-gradient(#2b0a3d,#8a1c4a 80%,#ff8a2a)"></div>
+<div class="bg" style="background:linear-gradient(#ff9a3c,#ff4f8b 60%,#7a1fa2)"></div>
+<div class="bg" style="background:radial-gradient(circle at 50% 30%,#10205a,#030616 75%)"></div>
+<div class="bg" style="background:linear-gradient(#071a3a,#0f5a6b 70%,#f3a33a)"></div>
+<div class="bg" style="background:linear-gradient(#5b0f4a,#d63a85 70%,#ffb3c9)"></div>
+<div class="bg" style="background:radial-gradient(circle at 50% 40%,#5a2a00,#1a0933 75%)"></div>
+<canvas id="c"></canvas>
+<button id="mute" onclick="tm()">🔊</button>
+
+<div class="step on"><div class="ic">🪔</div><h1>For Babita ✨</h1><p>A little Diwali surprise, made just for you… Keep your sound on 🔊</p><button onclick="go(1)">Light the diya 🪔</button></div>
+
+<div class="step"><div class="ic">🪔🪔🪔</div><h1>Let There Be Light 💛</h1><p>Just like a single diya chases away the darkness, you light up my life, Babita.</p><button onclick="go(2)">Next ➜</button></div>
+
+<div class="step"><div class="ic">🌼</div><h1>Colors of Rangoli 🌈</h1><p>Your smile is the most beautiful rangoli of my Diwali. This festival wouldn’t feel complete without you.</p><button onclick="go(3)">Next ➜</button></div>
+
+<div class="step"><div class="ic">🎆</div><h1>Fireworks! 🎇</h1><p>You’re the friend who makes every moment feel like a celebration. Look, even the sky is sparkling for you!</p><button onclick="boom()">More crackers 💥</button><button onclick="go(4)">Next ➜</button></div>
+
+<div class="step"><div class="ic">🏮</div><h1>Sky Lanterns 🏮</h1><p>These lanterns carry my every prayer up to the sky: your happiness, your health, your dreams. 🙏</p><button onclick="go(5)">Next ➜</button></div>
+
+<div class="step"><div class="ic">💖</div><h1>My Dearest Friend 🫶</h1><p>Our friendship is the most beautiful gift of all. You’re like family to me, Babita. Stay with me always! 💞</p><button onclick="go(6)">Last wish ➜</button></div>
+
+<div class="step" id="fin"><div class="ic">🪔</div><h1>Happy Diwali, Babita! 🌟</h1>
+<div id="ws"></div>
+<p style="font-size:15px;opacity:.75">With lots of love, your friend Arpit 💛</p>
+<button onclick="go(0)">Watch again 🔁</button></div>
+
+<div class="dots"></div>
+
+<script>
+var cur=0,S=document.querySelectorAll('.step'),B=document.querySelectorAll('.bg'),D=document.querySelector('.dots');
+var modes=['embers','embers','petals','fire','lanterns','hearts','gold'];
+S.forEach(function(){D.appendChild(document.createElement('i'))});
+var dots=D.children;dots[0].className='a';
+var W=["✨ May your life shine bright like a thousand diyas","💛 May you be blessed with endless joy and peace","🌸 May every dream of yours come true","🪔 May Maa Lakshmi’s blessings always be with you","🎆 Keep smiling, keep sparkling","💖 My friendship is always with you"];
+function wishes(){var h='';W.forEach(function(t,i){h+='<div class="w"><span style="animation-delay:'+(i*.9+.5)+'s">'+t+'</span></div>'});document.getElementById('ws').innerHTML=h}
+/* audio */
+var ac,muted=false,mel;
+function au(){if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)();mel=setInterval(note,520)}catch(e){}}if(ac&&ac.state=='suspended')ac.resume()}
+var sc=[523,587,659,784,880,1047];
+function tone(f,d,v,t){if(!ac||muted)return;var o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v,ac.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}
+function note(){if(Math.random()<.75)tone(sc[Math.floor(Math.random()*sc.length)]/2,1.4,.035,'triangle')}
+function chime(){[0,1,2].forEach(function(i){setTimeout(function(){tone(sc[i+2],1.2,.09)},i*130)})}
+function bang(){if(!ac||muted)return;var n=ac.sampleRate*.5,b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);var s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();f.type='lowpass';f.frequency.value=700;g.gain.value=.5;s.buffer=b;s.connect(f);f.connect(g);g.connect(ac.destination);s.start();tone(70,.4,.3)}
+function tm(){muted=!muted;document.getElementById('mute').textContent=muted?'🔇':'🔊'}
+/* steps */
+function go(n){au();S[cur].classList.remove('on');B[cur].classList.remove('on');dots[cur].className='';cur=n;S[cur].classList.add('on');B[cur].classList.add('on');dots[cur].className='a';P=[];chime();
+ if(n==3||n==6)boom();if(n==6)wishes();}
+/* particles */
+var cv=document.getElementById('c'),x=cv.getContext('2d'),P=[],T=0;
+function rs(){cv.width=innerWidth;cv.height=innerHeight}rs();addEventListener('resize',rs);
+function boom(){for(var k=0;k<3;k++)(function(k){setTimeout(function(){bang();var cx=Math.random()*cv.width,cy=Math.random()*cv.height*.5+50,h=Math.random()*360;
+ for(var i=0;i<70;i++){var a=Math.PI*2*i/70,s=Math.random()*4+1.5;P.push({k:'b',x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:80,m:80,h:h})}},k*350)})(k)}
+function add(m){var w=cv.width,h=cv.height,r=Math.random;
+ if(m=='embers'&&r()<.3)P.push({k:'b',x:r()*w,y:h+5,vx:(r()-.5)*.6,vy:-1-r()*1.5,l:200,m:200,h:30+r()*30,g:0});
+ if(m=='petals'&&r()<.2)P.push({k:'e',e:r()<.5?'🌼':'🌸',x:r()*w,y:-20,vx:(r()-.5),vy:1+r()*1.5,l:600,m:600,s:18+r()*16,a:r()*6,g:0});
+ if(m=='fire'&&r()<.025)boom();
+ if(m=='lanterns'&&r()<.05)P.push({k:'e',e:'🏮',x:r()*w,y:h+30,vx:(r()-.5)*.4,vy:-.8-r()*.8,l:900,m:900,s:24+r()*22,a:0,g:0});
+ if(m=='hearts'&&r()<.12)P.push({k:'e',e:r()<.5?'💖':'💗',x:r()*w,y:h+20,vx:(r()-.5)*.8,vy:-1.2-r()*1.5,l:700,m:700,s:16+r()*22,a:0,g:0});
+ if(m=='gold'){if(r()<.5)P.push({k:'b',x:r()*w,y:-5,vx:0,vy:1.5+r()*2,l:300,m:300,h:45,g:0});if(r()<.012)boom()}}
+function loop(){x.clearRect(0,0,cv.width,cv.height);add(modes[cur]);
+ if(P.length>600)P.splice(0,100);
+ P=P.filter(function(p){p.x+=p.vx;p.y+=p.vy;if(p.g!==0)p.vy+=.04;p.l--;
+  if(p.k=='b'){x.fillStyle='hsla('+p.h+',100%,65%,'+Math.min(1,p.l/p.m*1.5+.15)+')';x.beginPath();x.arc(p.x,p.y,2.4,0,7);x.fill()}
+  else{p.a+=.02;x.save();x.translate(p.x,p.y);x.rotate(Math.sin(p.a)*.5);x.globalAlpha=Math.min(1,p.l/60);x.font=p.s+'px serif';x.fillText(p.e,0,0);x.restore()}
+  return p.l>0&&p.y<cv.height+40&&p.y>-60});
+ requestAnimationFrame(loop)}
+loop();
+</script>
+</body>
+</html>
